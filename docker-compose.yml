@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: video-landmarks
+    container_name: video-landmarks-app
+    ports:
+      - "8501:8501"
+    volumes:
+      - ~/models/HRNet-Landmarks/weights:/app/weights
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - GRADIO_SERVER_NAME=0.0.0.0
